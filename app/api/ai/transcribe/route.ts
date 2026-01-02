@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// Lazy initialization - only create client when needed
+function getOpenAIClient() {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OpenAI API key not configured')
+  }
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+}
 
 export async function POST(request: NextRequest) {
   // API is currently restricted
@@ -41,6 +47,7 @@ export async function POST(request: NextRequest) {
 
     // Transcribe using OpenAI Whisper
     // When response_format is 'text', the response is a string directly
+    const openai = getOpenAIClient()
     const transcription = await openai.audio.transcriptions.create({
       file: audioForWhisper,
       model: 'whisper-1',

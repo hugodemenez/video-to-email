@@ -48,10 +48,10 @@ function loadTranscriptionModeFromStorage(): TranscriptionMode {
     if (stored === 'cloud' || stored === 'on-device') {
       return stored as TranscriptionMode
     }
-    return 'cloud'
+    return 'on-device'
   } catch (error) {
     console.error('Error loading transcription mode from localStorage:', error)
-    return 'cloud'
+    return 'on-device'
   }
 }
 
